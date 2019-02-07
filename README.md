@@ -1,38 +1,83 @@
-Role Name
+
+jq-filter
 =========
 
-A brief description of the role goes here.
+This role contains `jq()` filter, for using [jq] filter expressions in your
+Ansible playbooks, roles, and templates. It's not really a role, it's just a
+way to distrbute the `jq()` filter.
+
+[jq]: https://stedolan.github.io/jq/
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+The jq filter requires the Python [jq module]  to be installed on the host
+running your playbooks. Installing the module requires a build environment
+with a C compiler.
+
+[jq module]: https://pypi.org/project/jq/
+
+For Debian, Ubuntu, etc
+
+```sh
+apt-get install autoconf automake build-essential libtool python-dev
+```
+
+For Red Hat, CentOS, Fedora, etc
+
+```
+yum groupinstall "Development Tools"
+yum install autoconf automake libtool python
+```
+
+The jq command is not required. No libraries or modules are required on remote hosts.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+None.
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+No dependencies on other roles.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
+```yaml
+- hosts: localhost
+  connection: local
+  vars:
+    domain_definition:
+      domain:
+        cluster:
+          - name: "cluster1"
+          - name: "cluster2"
+        server:
+          - name: "server11"
+            cluster: "cluster1"
+            port: "8080"
+          - name: "server12"
+            cluster: "cluster1"
+            port: "8090"
+          - name: "server21"
+            cluster: "cluster2"
+            port: "9080"
+          - name: "server22"
+            cluster: "cluster2"
+            port: "9090"
+        library:
+          - name: "lib1"
+            target: "cluster1"
+          - name: "lib2"
+            target: "cluster2"
+  tasks:
+    - name: Show cluster names
+      debug:
+        var: "{{ domain_definitions | jq('.domain.cluster[].name') }}"
+```
 License
 -------
 
 BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
