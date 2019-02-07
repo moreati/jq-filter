@@ -75,7 +75,7 @@ Example Playbook
   tasks:
     - name: Show cluster names
       debug:
-        var: "{{ domain_definitions | jq('.domain.cluster[].name') }}"
+        msg: "{{ domain_definition | jq('.domain.cluster[].name') }}"
 ```
 License
 -------
