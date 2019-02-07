@@ -21,7 +21,7 @@ def jq_filter(data, expr):
     except Exception as e:
         raise AnsibleFilterError("Unknown error with jq expression: %s" % to_native(e))
 
-    return program.transform(data)
+    return program.transform(data, multiple_output=True)
 
 
 class FilterModule(object):
