@@ -1,0 +1,14 @@
+authors:
+  - Alex Willmer <alex@moreati.org.uk>
+description:
+  Filter JSON with jq
+namespace: moreati
+name: jq-filter
+readme: README.md
+license:
+  - Apache-2.0
+repository: https://github.com/moreati/jq-filter
+tags:
+  - jq
+  - json
+version: 0.1.0
