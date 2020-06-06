@@ -1,3 +1,6 @@
 venv/
+*.log
 *.pyc
 *.pyo
+*.retry
+*.tar.gz
