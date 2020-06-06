@@ -3,8 +3,8 @@ jq-filter
 =========
 
 This Ansible collection provides `jq()`, a filter that slices and dices JSON
-just like the [`jq`] command. It's particularly suited to dealing with deeply
-nested lists of dicts, and dicts of lists.
+just like the [jq] command. It's particularly good with deeply nested lists
+of dicts, and dicts of lists.
 
 Example
 -------
