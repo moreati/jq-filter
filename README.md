@@ -2,35 +2,79 @@
 jq-filter
 =========
 
-This role contains `jq()` filter, for using [jq] filter expressions in your
-Ansible playbooks, roles, and templates. It's not really a role, it's just a
-way to distrbute the `jq()` filter.
+This Ansible collection provides `jq()`, a filter that slices and dices JSON
+just like the [`jq`] command. It's particularly suited to dealing with deeply
+nested lists of dicts, and dicts of lists.
+
+Example
+-------
+
+A list of databases & nested users such as
+
+```yaml
+databases:
+  - {name: db1, users: [{username: alice}, {username: alex}]}
+  - {name: db2, users: [{username: bob}, {username: brienne}]}
+```
+
+can be transformed by a template expression such as
+
+```jinja
+{{ databases | moreati.jq.jq('map({db: .name, user: .users[].username}) }}
+
+```
+
+into a flat list
+
+```
+[
+  {"db": "db1", "user": "alice"},
+  {"db": "db1", "user": "alex"},
+  {"db": "db2", "user": "bob"},
+  {"db": "db2", "user": "brienne"}
+]
+```
+
+You can try out jq expressions at [jqplay.org], starting with this [example].
 
 [jq]: https://stedolan.github.io/jq/
+[jq expression language]: https://stedolan.github.io/jq/manual/#Basicfilters
+[jqplay.org]: https://jqplay.org
+[example]: https://jqplay.org/s/zg_l3ZoT6C
+
+Installation
+------------
+
+To install this collection run
+
+```
+ansible-galaxy collection install moreati.jq
+```
 
 Requirements
 ------------
 
-The jq filter requires the Python [jq module]  to be installed on the host
-running your playbooks. Installing the module requires a build environment
-with a C compiler.
+This collection requires
 
-[jq module]: https://pypi.org/project/jq/
+- [Ansible] >= 2.8
+- [Python jq] >= 1.0
 
-For Debian, Ubuntu, etc
-
-```sh
-apt-get install autoconf automake build-essential libtool python-dev
-```
-
-For Red Hat, CentOS, Fedora, etc
+To install Python jq run
 
 ```
-yum groupinstall "Development Tools"
-yum install autoconf automake libtool python
+python -m pip jq
 ```
 
-The jq command is not required. No libraries or modules are required on remote hosts.
+Python jq is only needed on the Ansible controller (the host your playbooks
+run _from_). It's not needed on Ansible targets (hosts your playbooks run
+_against_). The `jq` command isn't needed.
+
+pre-compiled wheels have been published for CPython 2.7, and 3.x on MacOS,
+and Linux (x86, x86_64). Other Python version, and pltforms will need to build
+the module from source.
+
+[ansible]: https://ansible.com
+[Python jq]: https://pypi.org/project/jq
 
 Role Variables
 --------------
@@ -45,39 +89,10 @@ No dependencies on other roles.
 Example Playbook
 ----------------
 
-```yaml
-- hosts: localhost
-  connection: local
-  vars:
-    domain_definition:
-      domain:
-        cluster:
-          - name: "cluster1"
-          - name: "cluster2"
-        server:
-          - name: "server11"
-            cluster: "cluster1"
-            port: "8080"
-          - name: "server12"
-            cluster: "cluster1"
-            port: "8090"
-          - name: "server21"
-            cluster: "cluster2"
-            port: "9080"
-          - name: "server22"
-            cluster: "cluster2"
-            port: "9090"
-        library:
-          - name: "lib1"
-            target: "cluster1"
-          - name: "lib2"
-            target: "cluster2"
-  tasks:
-    - name: Show cluster names
-      debug:
-        msg: "{{ domain_definition | jq('.domain.cluster[].name') }}"
-```
+- [playbooks/demo.yml]
+
+[playbooks/demo.yml]: https://github.com/moreati/jq-filter/blob/master/playbooks/demo.yml
 License
 -------
 
-BSD
+Apache 2.0
