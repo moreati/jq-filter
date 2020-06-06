@@ -1,0 +1,11 @@
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    databases:
+      - {name: db1, users: [{username: alice}, {username: alex}]}
+      - {name: db2, users: [{username: bob}, {username: brienne}]}
+  tasks:
+    - name: Show a flat list of databases and users
+      debug:
+        msg: "{{ databases | moreati.jq.jq('map({db: .name, user: .users[].username})') }}"
