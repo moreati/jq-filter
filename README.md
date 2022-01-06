@@ -20,7 +20,7 @@ databases:
 can be transformed by a template expression such as
 
 ```jinja
-{{ databases | moreati.jq.jq('map({db: .name, user: .users[].username}) }}
+{{ databases | moreati.jq.jq('map({db: .name, user: .users[].username})') }}
 
 ```
 
