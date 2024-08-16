@@ -1,5 +1,5 @@
-# Copyright: 2019, 2020, Alex Willmer <alex@moreati.org.uk>
-# Licensed under the Apache License, Version 2.0
+# SPDX-FileCopyrightText: 2019, 2020, Alex Willmer <alex@moreati.org.uk>
+# SPDX-License-Identifier: Apache-2.0
 
 - hosts: localhost
   connection: local

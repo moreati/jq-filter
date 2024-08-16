@@ -1,3 +1,7 @@
+<!--
+SPDX-FileCopyrightText: 2019, 2020, Alex Willmer <alex@moreati.org.uk>
+SPDX-License-Identifier: Apache-2.0
+-->
 
 jq-filter
 =========
